@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            width: 60%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .image {
+            flex: 1;
+            order: 1;
+        }
+        .image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .details {
+            flex: 2;
+            padding-left: 20px;
+            text-align: left;
+            order: 2;
+        }
+        .details h2 {
+            margin: 0;
+            color: #333;
+        }
+        .details p {
+            color: #666;
+        }
+        .price {
+            font-size: 20px;
+            color: #e60000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image">
+            <img id="product-image" src="" alt="Product Image">
+        </div>
+        <div class="details">
+            <h2 id="product-title"></h2>
+            <p id="product-description"></p>
+            <p class="price" id="product-price"></p>
+            <p><strong>Size:</strong> <span id="product-size"></span></p>
+            <p><strong>Ratings:</strong> <span id="product-ratings"></span> ⭐⭐⭐⭐</p>
+        </div>
+    </div>
+    
+    <script>
+        const productData = {
+            "image": "https://innovist.com/cdn/shop/files/Shampoo_1.jpg?v=1733297902&width=540",
+            "title": "Shampoo",
+            "description": "Anti Dandruff Shampoo with Salicylic Acid & Biotin- 250ml",
+            "price": "₹545",
+            "size": "250ml",
+            "ratings": "4.5"
+        };
+
+        document.getElementById("product-image").src = productData.image;
+        document.getElementById("product-title").textContent = productData.title;
+        document.getElementById("product-description").textContent = productData.description;
+        document.getElementById("product-price").textContent = productData.price;
+        document.getElementById("product-size").textContent = productData.size;
+        document.getElementById("product-ratings").textContent = productData.ratings;
+    </script>
+</body>
+</html>
+
