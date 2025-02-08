@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.Name }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; margin: 0; padding: 0;">
+    <div class="product-details" style="max-width: 900px; margin: 30px auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <h1 style="font-size: 2rem; color: #007BFF; text-align: center; margin-bottom: 20px;">{{ product.Name }}</h1>
+        <img src="{{ product.image_url }}" alt="{{ product.Name }}" style="max-width: 100%; height: auto; display: block; margin: 0 auto 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Brand:</strong> {{ product.Brand }}
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Description:</strong> {{ product.Description }}
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Price:</strong> <span style="color: #28a745;">${{ product.Price }}</span>
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Rating:</strong> {{ product.Rating }} / 5
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Stock:</strong> 
+            <span style="color: {{ '#28a745' if product['Stock Quantity'] > 0 else '#dc3545' }};">
+                {{ 'In Stock' if product['Stock Quantity'] > 0 else 'Out of Stock' }}
+            </span>
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Size:</strong> {{ product.Size }}
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Color:</strong> {{ product.Color }}
+        </p>
+        <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: #555;">
+            <strong>Warranty:</strong> {{ product.Warranty }}
+        </p>
+    </div>
+</body>
+</html>

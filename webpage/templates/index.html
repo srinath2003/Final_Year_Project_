@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="logo">Store</div>
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search products...">
+        </div>
+        <div class="user-actions">
+            <button onclick="toggleLoginSignup()">Login / Sign Up</button>
+        </div>
+    </nav>
+
+    <div class="filters">
+        <label for="category">Category:</label>
+        <select id="category">
+            <option value="">All</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Fashion">Clothing</option>
+            <option value="Home & Kitchen">Home & Kitchen</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Books">Books</option>
+            <option value="Beauty">Beauty</option>
+            <option value="Sports">Sports</option>
+            <option value="Food & Beverage">Food & Beverage</option>
+            <option value="Mobile Phones">Mobile Phones</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Audio">Audio</option>
+            <option value="Accessories">Accessories</option>
+
+            <option value="Laptops">Laptops</option>
+            <option value="Home Appliances">Home Appliances</option>
+            <option value="Health & Fitness">Health & Fitness</option>
+
+           
+
+        </select>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" placeholder="Max price">
+
+        <label for="rating">Rating:</label>
+        <input type="number" id="rating" min="1" max="5" placeholder="Min rating">
+    </div>
+
+    <div class="products" id="products-container"></div>
+
+    <script>
+        async function fetchProducts(filters = {}) {
+            try {
+                const params = new URLSearchParams(filters).toString();
+                const response = await fetch(`/products?${params}`);
+                const products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+
+        function displayProducts(products) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                const card = `
+                    <div class="product-card">
+                        <img src="${product.image_url}" alt="${product.Name}">
+                        <h3>${product.Name}</h3>
+                        <p>${product.Description}</p>
+                        <p class="price">$${product.Price}</p>
+                        <button onclick="viewProductDetails(${product.ID})">View Details</button>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        function viewProductDetails(productId) {
+            window.location.href = `/product/${productId}`;
+        }
+
+        document.getElementById('category').addEventListener('change', updateFilters);
+        document.getElementById('price').addEventListener('input', updateFilters);
+        document.getElementById('rating').addEventListener('input', updateFilters);
+
+        function updateFilters() {
+            const filters = {
+                category: document.getElementById('category').value,
+                price: document.getElementById('price').value,
+                rating: document.getElementById('rating').value
+            };
+            fetchProducts(filters);
+        }
+
+        document.getElementById('search').addEventListener('input', updateFilters);
+
+function updateFilters() {
+    const filters = {
+        category: document.getElementById('category').value,
+        price: document.getElementById('price').value,
+        rating: document.getElementById('rating').value,
+        search: document.getElementById('search').value
+    };
+    fetchProducts(filters);
+}
+
+        window.onload = fetchProducts;
+    </script>
+</body>
+</html>
