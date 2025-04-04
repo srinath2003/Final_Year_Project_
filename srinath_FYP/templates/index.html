@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Store</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <h1>Product Listings</h1>
+    <div>
+        <button onclick="logout()">Log Out</button>
+        <button>Account</button>
+        <button onclick="window.location.href='/cart'">View Cart</button> <!-- New Cart Button -->
+    </div>
+    <!-- Search Bar -->
+    <div id="search-bar">
+        
+    </div>
+
+    <!-- Filters Section -->
+    <div id="filters">
+        <input type="text" id="searchBar" placeholder="Search products...">
+        <select id="categoryFilter">
+            <option value="">Select Category</option>
+        </select>
+
+        <div class="dropdown">
+            <button class="dropbtn">Select Brand</button>
+            <div class="dropdown-content" id="brandFilter"></div>
+        </div>
+
+        <input type="number" id="minPrice" placeholder="Min Price">
+        <input type="number" id="maxPrice" placeholder="Max Price">
+        <input type="number" id="rating" placeholder="Min Rating">
+
+        <button class="applybtn" onclick="applyFilters()">Apply Filters</button>
+    </div>
+
+    <!-- Products Container -->
+    <div id="productContainer" class="product-container"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
