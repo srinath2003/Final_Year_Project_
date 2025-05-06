@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Order Details{% endblock %}
+
+{% block body_style %}
+background: url('../static/images/login and signup.jpeg') no-repeat center center fixed;
+background-size: cover;
+background-position: center;
+{% endblock %}
+
+{% block content %}
+<!-- <div class="menu-container">
+    <button class="menu-toggle">☰ Menu</button>
+    <div class="menu-dropdown">
+        <a href="/products">Back to Products</a>
+        <a href="/account">Account</a>
+        <a href="/wishlist">Wishlist</a>
+        <a href="/cart">View Cart</a>
+        <a href="/report">Report an Issue</a>
+        <a href="#" onclick="logout()">Log Out</a>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="product-details">
+        <img id="productImage" src="" alt="Product Image">
+        <div class="product-info">
+            <h2 id="productName"></h2>
+            <div class="price" id="productPrice"></div>
+            <div class="quantity">Quantity: <span id="productQuantity"></span></div>
+            <div class="details-row">
+                <span class="label">Order ID</span>
+                <span class="value" id="orderId"></span>
+            </div>
+            <div class="details-row">
+                <span class="label">Order Date</span>
+                <span class="value" id="orderDate"></span>
+            </div>
+            <div class="details-row">
+                <span class="label">Status</span>
+                <span class="status" id="orderStatus"></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    window.onload = loadOrderDetails;
+</script>
+{% endblock %}

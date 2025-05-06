@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Report an Issue{% endblock %}
+
+{% block body_style %}
+background: url('../static/images/plain bg.png') no-repeat center center fixed;
+background-size: cover;
+background-position: center;
+{% endblock %}
+
+{% block content %}
+<!-- 
+<div class="menu-container">
+    <button class="menu-toggle">☰ Menu</button>
+    <div class="menu-dropdown">
+        <a href="/products">Back to Products</a>
+        <a href="/account">Account</a>
+        <a href="/wishlist">Wishlist</a>
+        <a href="/cart">View Cart</a>
+        <a href="/orderdetails">Order Details</a>
+        <a href="#" onclick="logout()">Log Out</a>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="report-header">
+        <h1>Report an Issue</h1>
+        <p>Please provide your email and describe your concern</p>
+    </div>
+    
+    <form class="report-form">
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="complaint">Your Complaint</label>
+            <textarea id="complaint" class="complaint-box" placeholder="Please describe your issue in detail..." required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Attach Image (Optional)</label>
+            <div class="file-upload-wrapper">
+                <input type="file" id="image" name="image">
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn-report">Submit Report</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/script.js"></script>
+{% endblock %}

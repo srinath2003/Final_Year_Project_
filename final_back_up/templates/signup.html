@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='country-state-city.js') }}"></script>
+</head>
+<body style="background: url('../static/images/login\ and\ signup.jpeg') no-repeat center center fixed; background-size: cover; background-position: center;">
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form action="{{ url_for('auth.signup') }}" method="POST" onsubmit="return validateForm()">
+
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <div class="phone-container">
+                <select id="country_code" name="country_code" required></select>
+                <input type="text" id="phone" name="phone_number" placeholder="Enter phone number" required>
+            </div>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="country">Country:</label>
+            <select id="country" name="country" required onchange="populateStates()">
+                <option value="">Select Country</option>
+            </select>
+
+            <label for="state">State:</label>
+            <select id="state" name="state" required onchange="populateCities()">
+                <option value="">Select State</option>
+            </select>
+
+            <label for="city">City:</label>
+            <select id="city" name="city" required>
+                <option value="">Select City</option>
+            </select>
+
+            <label for="postal_code">Postal Code:</label>
+            <input type="text" id="postal_code" name="postal_code" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="date_of_birth" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required onkeyup="checkPasswordStrength()">
+            <div id="password-strength">
+                <div id="strength-bar"></div>
+            </div>
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required onkeyup="validatePasswordMatch()">
+            <p id="password-match-message"></p>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+        <p class="error" id="errorMessage"></p>
+    </div>
+
+    <script>
+        const countryCodes = [
+            { name: "India", code: "+91" },
+            { name: "United States", code: "+1" },
+            { name: "United Kingdom", code: "+44" },
+            { name: "Canada", code: "+1" },
+            { name: "Australia", code: "+61" },
+            { name: "Germany", code: "+49" },
+            { name: "France", code: "+33" },
+            { name: "Japan", code: "+81" },
+            { name: "Brazil", code: "+55" },
+            { name: "South Africa", code: "+27" }
+        ];
+        const countries = {
+            "India": ["Tamil Nadu", "Karnataka", "Maharashtra"],
+            "United States": ["California", "Texas", "Florida"],
+            "Canada": ["Ontario", "Quebec", "British Columbia"]
+        };
+        const cities = {
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
+            "Karnataka": ["Bangalore", "Mysore", "Hubli"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
+            "California": ["Los Angeles", "San Francisco", "San Diego"],
+            "Texas": ["Houston", "Austin", "Dallas"],
+            "Florida": ["Miami", "Orlando", "Tampa"],
+            "Ontario": ["Toronto", "Ottawa", "Mississauga"],
+            "Quebec": ["Montreal", "Quebec City", "Laval"],
+            "British Columbia": ["Vancouver", "Victoria", "Kelowna"]
+        };
+
+        // Populate Country Codes
+        const countryCodeSelect = document.getElementById('country_code');
+        countryCodes.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country.code;
+            option.textContent = `${country.name} (${country.code})`;
+            countryCodeSelect.appendChild(option);
+        });
+
+        // Populate Countries
+        const countrySelect = document.getElementById('country');
+        Object.keys(countries).forEach(country => {
+            const option = document.createElement('option');
+            option.value = country;
+            option.textContent = country;
+            countrySelect.appendChild(option);
+        });
+
+        function populateStates() {
+            const country = document.getElementById('country').value;
+            const stateSelect = document.getElementById('state');
+            stateSelect.innerHTML = '<option value="">Select State</option>'; // Clear previous options
+            if (country && countries[country]) {
+                countries[country].forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            }
+            document.getElementById('city').innerHTML = '<option value="">Select City</option>'; //clear city
+        }
+
+        function populateCities() {
+            const state = document.getElementById('state').value;
+            const citySelect = document.getElementById('city');
+            citySelect.innerHTML = '<option value="">Select City</option>'; // Clear previous options
+            if (state && cities[state]) {
+                cities[state].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

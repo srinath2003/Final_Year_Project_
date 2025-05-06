@@ -1,0 +1,91 @@
+kafka cmds
+
+/usr/local/kafka/bin/zookeeper-server-start.sh /usr/local/kafka/config/zookeeper.properties
+/usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties
+
+/usr/local/kafka/bin/kafka-server-stop.sh
+/usr/local/kafka/bin/zookeeper-server-stop.sh
+
+
+/usr/local/kafka/bin/kafka-topics.sh  --list --bootstrap-server localhost:9092
+
+
+
+
+jps
+
+
+kafka-console-consumer.sh --bootstrap-server 172.22.213.208:9092 --topic user_interactions --from-beginning
+
+/usr/local/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic user_interactions --from-beginning
+
+
+listen_address: 0.0.0.0
+rpc_address: 0.0.0.0
+
+
+listen_address: 127.0.0.1
+rpc_address: 127.0.0.1
+
+
+srinath0910@SrinathR:~$ sudo service cassandra restart
+srinath0910@SrinathR:~$ sudo systemctl status Cassandra
+
+netstat -tulnp | grep 9042
+
+
+
+rm -rf ~/kafka-logs
+
+
+srinath0910@SrinathR:~$ zookeeper-server-start.sh -daemon /usr/local/kafka/config/zookeeper.properties
+srinath0910@SrinathR:~$ kafka-server-start.sh -daemon /usr/local/kafka/config/server.properties
+srinath0910@SrinathR:~$ jps
+2597 QuorumPeerMain
+3128 Jps
+3022 Kafka
+srinath0910@SrinathR:~$
+
+
+cat /usr/local/kafka/logs/zookeeper.out
+
+
+nano /usr/local/kafka/config/server.properties
+
+listeners=PLAINTEXT://0.0.0.0:9092
+advertised.listeners=PLAINTEXT://172.22.213.208:9092
+
+
+sudo nano /etc/cassandra/cassandra.yaml
+
+CREATE TABLE IF NOT EXISTS user_interactions1 (
+    user_id int,
+    action_timestamp timestamp,
+    action text,
+    category text,
+    product_id int,
+    PRIMARY KEY (user_id, action_timestamp)
+) WITH CLUSTERING ORDER BY (action_timestamp DESC);
+
+
+ kafka-topics.sh --create --topic filter_interactions --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+kafka-topics.sh --create --topic user_session_time --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+CREATE TABLE IF NOT EXISTS filter_interactions (
+    user_id int,
+    timestamp TIMESTAMP,
+    action TEXT,
+    value TEXT,
+    category TEXT,
+    PRIMARY KEY ((user_id), timestamp)
+) WITH CLUSTERING ORDER BY (timestamp DESC);
+
+CREATE TABLE user_session_time (
+    user_id int,
+    session_id text,
+    start_time timestamp,
+    end_time timestamp,
+    duration_seconds int,
+    PRIMARY KEY (session_id)
+);

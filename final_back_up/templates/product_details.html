@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.Name }}{% endblock %}
+
+{% block body_style %}
+background: url('../static/images/plain bg.png') no-repeat center center fixed;
+background-size: cover;
+background-position: center;
+{% endblock %}
+
+{% block content %}
+<div class="header-buttons">
+    <button onclick="window.location.href='/products'">Back to Products</button>
+    <button onclick="window.location.href='/cart'">View Cart</button>
+</div>
+
+<div class="product-details">
+    <div>
+        <img src="{{ product.Image }}" alt="{{ product.Name }}">
+    </div>
+    <div>
+        <h2>{{ product.Name }}</h2>
+        <p><strong>Category:</strong> {{ product.Category }}</p>
+        <p><strong>Brand:</strong> {{ product.Brand }}</p>
+        <p><strong>Description:</strong> {{ product.Description }}</p>
+        <p><strong>Color:</strong> {{ product.Color }}</p>
+        <p><strong>Size:</strong> {{ product.Size }}</p>
+        <p><strong>Price:</strong> ₹{{ product.Price }}</p>
+        <p><strong>Warranty:</strong> {{ product.Warranty }}</p>
+        <p><strong>Quantity:</strong> {{ product.Stock_Quantity }} left</p>
+        <p><strong>Rating:</strong> ⭐{{ product.Rating }} ({{ product.Rating_Count }} reviews)</p>
+        <button class="add-to-cart"
+            onclick="logInteraction('{{product.ID}}', 'add_to_cart', this, '{{product.Category}}'); addToCart('{{product.ID}}', '{{product.Name}}', '{{product.Price}}')">
+            Add to Cart
+        </button>
+        <button class="like"
+            onclick="logInteraction('{{product.ID}}', 'like', this, '{{product.Category}}'); addToWishList('{{product.ID}}', '{{product.Name}}', '{{product.Category}}', '{{product.Brand}}', '{{product.Stock_Quantity}}', '{{product.Price}}', '{{product.Image}}', '{{product.Rating}}')">
+            ❤️ Like
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/script.js"></script>
+{% endblock %}

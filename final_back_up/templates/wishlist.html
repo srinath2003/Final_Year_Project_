@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}My Wishlist{% endblock %}
+
+{% block body_style %}
+background: url('../static/images/cart and wishlist bg.jpeg') no-repeat center center fixed;
+background-size: cover;
+background-position: center;
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div>
+        <h1>My Wishlist</h1>
+    </div>
+</div>
+<!-- 
+<div class="menu-container">
+    <button class="menu-toggle">☰ Menu</button>
+    <div class="menu-dropdown">
+        <a onclick="clearWishList()">Clear Wishlist</a>
+        <a href="/products">Back to Products</a>
+        <a href="/account">Account</a>
+        <a href="/cart">View Cart</a>
+        <a href="/orderdetails">Order Details</a>
+        <a href="/report">Report an Issue</a>
+        <a href="#" onclick="logout()">Log Out</a>
+    </div>
+</div> -->
+
+
+
+<div id="wishlistContainer"></div>
+
+<div class="button-group">
+    <button class="action-button" onclick="showConfirmModal()">Clear Wishlist</button>
+  </div>
+  
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p>Are you sure you want to clear your wishlist?</p>
+        <button onclick="clearwishlist()">Yes</button>
+        <button onclick="closeModal()">No</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    window.onload = loadWishList;
+    function showConfirmModal() {
+        document.getElementById("confirmModal").style.display = "block";
+    }
+
+    // Function to close the confirmation modal
+    function closeModal() {
+        document.getElementById("confirmModal").style.display = "none";
+    }
+
+    // Function to clear the cart
+    function clearwishlist() {
+        localStorage.removeItem("wishlist");
+        loadWishList();
+        closeModal();
+    }
+</script>
+{% endblock %}

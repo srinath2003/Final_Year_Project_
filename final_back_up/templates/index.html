@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Filters Section -->
+    <div id="filters">
+        <input type="text" id="searchBar" placeholder="Search products...">
+        <button id="searchButton" class="searchbtn">Search</button>
+        <select id="categoryFilter">
+            <option value="">Select Category</option>
+        </select>
+
+        <div class="dropdown">
+            <ul class="dropbtn">Select Brand</ul>
+            <div class="dropdown-content" id="brandFilter"></div>
+        </div>
+
+        <input type="number" id="minPrice" placeholder="Min Price">
+        <input type="number" id="maxPrice" placeholder="Max Price">
+        <input type="number" id="rating" placeholder="Min Rating">
+
+        <button class="applybtn" onclick="applyFilters()">Apply Filters</button>
+    </div>
+<!-- Recommended Products Container -->
+<h2>Recommended Products</h2>
+<div id="recommendedProductsContainer" class="product-container"></div>
+
+
+    <!-- Products Container -->
+    <div id="productContainer" class="product-container"></div>
+
+    
+{% endblock %}
+
+{% block script %}
+<script src="/static/script.js"></script>
+<script>
+    const CURRENT_USER_ID = "{{ current_user_id }}";
+
+    async function fetchRecommendedProducts() {
+        try {
+            const response = await fetch('/jsonrecommended');
+            const recommendedData = await response.json();
+
+            // Ensure all products are already loaded into `allProducts`
+            const recommendedForUser = recommendedData.find(rec => rec.user_id == CURRENT_USER_ID);
+            if (!recommendedForUser || !Array.isArray(recommendedForUser.recommended_items)) {
+                console.warn("No recommendations found for current user.");
+                return;
+            }
+
+            const recommendedProducts = allProducts.filter(product =>
+                recommendedForUser.recommended_items.includes(String(product.ID))
+            );
+
+            displayRecommendedProducts(recommendedProducts);
+
+        } catch (err) {
+            console.error("Error fetching recommended products:", err);
+        }
+    }
+
+    // Display function for recommended section
+    function displayRecommendedProducts(products) {
+        const container = document.getElementById('recommendedProductsContainer');
+        container.innerHTML = '';
+
+        products.forEach(product => {
+            let productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+
+            productCard.innerHTML = `
+                <img src="${product.Image}" alt="${product.Name}">
+                <div class="card-content">
+                <h2 class="product-card-h2">${product.Name}</h2>
+                <p class="product-card-p"><strong>Category:</strong> ${product.Category}</p>
+                <p class="product-card-p"><strong>Brand:</strong> ${product.Brand}</p>
+                <p class="product-card-p"><strong>Price:</strong> ₹${product.Price}</p>
+                <p class="product-card-p"><strong>Stock Left:</strong> ${product.Stock_Quantity}</p>
+                <p class="product-card-p"><strong>Rating:</strong> ⭐${product.Rating} (${product.Rating_Count} reviews)</p>
+                <div class="product-buttons">
+                    <a href="/product/${product.ID}" class="view-details" onclick="logAndNavigate(event, '${product.ID}', '${product.Category}', this)">View Details</a>
+                    <button class="add-to-cart" onclick="logInteraction('${product.ID}', 'add_to_cart', this, '${product.Category}');addToCart(${product.ID}, '${product.Name}', ${product.Price}, '${product.Image}', ${product.Rating})">Add to Cart</button>
+                    <button class="like" onclick="logInteraction('${product.ID}', 'like', this, '${product.Category}');addToWishList(${product.ID}, '${product.Name}', '${product.Category}', '${product.Brand}', ${product.Stock_Quantity}, ${product.Price}, '${product.Image}', ${product.Rating})">❤️ Like</button>
+                </div>
+                </div>
+            `;
+
+            container.appendChild(productCard);
+        });
+    }
+
+    // Call the function when the page loads
+    window.onload = fetchRecommendedProducts;
+</script>
+{% endblock %}

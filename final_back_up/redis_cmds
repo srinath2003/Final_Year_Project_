@@ -1,0 +1,25 @@
+redis-cli
+
+PING
+
+sudo service redis-server restart
+
+GET <key>	Get the value of a key.
+
+KEYS *
+
+
+SPARK
+
+create env
+
+
+conda activate pyspark_env
+where python 
+python version 3.9.22
+echo %PYSPARK_PYTHON%
+
+set PYSPARK_PYTHON=C:\Users\srina\anaconda3\envs\pyspark_env\python.exe
+setx PYSPARK_PYTHON=C:\Users\srina\anaconda3\envs\pyspark_env\python.exe
+
+echo $env:PYSPARK_PYTHON

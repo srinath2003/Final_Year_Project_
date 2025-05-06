@@ -1,0 +1,154 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-commerce Store{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body style="{% block body_style %}background: url('../static/images/products bg.jpeg') no-repeat center center fixed; background-size: cover; background-position: center;{% endblock %}">
+
+    <div class="header">
+        <div>
+            <h1>CART CRAZE</h1>
+        </div>
+        
+        <div class="menu-container">
+            <button class="menu-toggle">☰ Menu</button>
+            <div class="menu-dropdown">
+              <a href="/account">Account</a>{% if request.path != '/products' %}
+              <a href="/products">Back to Products</a>
+            {% endif %}
+              <a href="/wishlist">Wishlist</a>
+              <a href="/cart">View Cart</a>
+              <a href="/orderdetails">Order Details</a>
+              <a href="/report">Report an Issue</a>
+              <a href="#" onclick="logout()">Log Out</a>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+      <!-- storing start session timing then calculating ending time -->
+    <script>
+        (function () {
+          let sessionId = sessionStorage.getItem("session_id");
+          let startTime = sessionStorage.getItem("start_time");
+          const userId = "{{ session['user_id'] if 'user_id' in session else '1' }}";
+          let endLogged = false;
+          let visibilityTimeout;
+          console.log("Session script loaded");
+          console.log("User ID:", userId);
+          console.log("Start Time:", startTime);
+
+        
+          if (!sessionId || !startTime) {
+            sessionId = crypto.randomUUID();
+            startTime = new Date().toISOString();
+            sessionStorage.setItem("session_id", sessionId);
+            sessionStorage.setItem("start_time", startTime);
+        
+            fetch("/log_session_start", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ user_id: userId, session_id: sessionId, start_time: startTime })
+            });
+          }
+        
+          document.addEventListener("visibilitychange", function () {
+            if (document.visibilityState === "hidden") {
+              // Delay session end logging for 10 seconds
+              visibilityTimeout = setTimeout(() => {
+                if (!endLogged) {
+                  const endTime = new Date().toISOString();
+                  console.log("Logging session end");
+                  console.log("End Time:", new Date().toISOString());
+
+                  navigator.sendBeacon("/log_session_end", JSON.stringify({
+                    user_id: userId,
+                    session_id: sessionId,
+                    end_time: endTime
+                  }));
+                  sessionStorage.removeItem("session_id");
+                  sessionStorage.removeItem("start_time");
+                  endLogged = true;
+                }
+              }, 100000); // 100 seconds
+            } else {
+              // If the user returns before 100 seconds, cancel ending the session
+              clearTimeout(visibilityTimeout);
+              console.log("Document visibility changed:", document.visibilityState);
+
+            }
+          });
+        })();
+        </script>
+<!-- storing  session start timing & ending time at last -->
+<!-- <script>
+  (function () {
+    let sessionId = sessionStorage.getItem("session_id");
+    let startTime = sessionStorage.getItem("start_time");
+    const userId = "{{ session.get('user_id', '1') }}";
+    let endLogged = false;
+    let visibilityTimeout;
+  
+    if (!sessionId || !startTime) {
+      sessionId = crypto.randomUUID();
+      startTime = new Date().toISOString();
+      sessionStorage.setItem("session_id", sessionId);
+      sessionStorage.setItem("start_time", startTime);
+  
+      // Send session start to backend
+      fetch("/log_session_start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: userId,
+          session_id: sessionId,
+          start_time: startTime
+        })
+      });
+    }
+  
+    function logSessionEnd() {
+      if (endLogged) return;
+  
+      const endTime = new Date().toISOString();
+      const durationSeconds = Math.floor((new Date(endTime) - new Date(startTime)) / 1000);
+  
+      const blob = new Blob([JSON.stringify({
+        user_id: userId,
+        session_id: sessionId,
+        start_time: startTime,
+        end_time: endTime,
+        duration_seconds: durationSeconds
+      })], { type: 'application/json' });
+  
+      navigator.sendBeacon("/log_session_end", blob);
+      sessionStorage.removeItem("session_id");
+      sessionStorage.removeItem("start_time");
+      endLogged = true;
+    }
+  
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") {
+        // If user leaves tab, wait 100 sec before logging end
+        visibilityTimeout = setTimeout(logSessionEnd, 10000);
+      } else {
+        // User came back, cancel the timeout
+        clearTimeout(visibilityTimeout);
+      }
+    });
+  
+    // ⚠️ Removed window.beforeunload to avoid ending session during navigation
+  })();
+  </script> -->
+  
+  
+        
+
+    {% block script %}{% endblock %}
+</body>
+</html>

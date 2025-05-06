@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block body_style %}
+background: url('../static/images/cart and wishlist bg.jpeg') no-repeat center center fixed;
+background-size: cover;
+background-position: center;
+{% endblock %}
+
+{% block content %}
+<div class="header">
+    <div>
+        <h1>Shopping Cart</h1>
+    </div>
+</div>
+<!-- 
+<div class="menu-container">
+    <button class="menu-toggle">☰ Menu</button>
+    <div class="menu-dropdown">
+        <a onclick="clearCart()">Clear Cart</a>
+        <a href="/products">Back to Products</a>
+        <a href="/account">Account</a>
+        <a href="/wishlist">Wishlist</a>
+        <a href="/orderdetails">Order Details</a>
+        <a href="/report">Report an Issue</a>
+        <a href="#" onclick="logout()">Log Out</a>
+    </div>
+</div> -->
+
+<div id="cartContainer"></div>
+<div id="cartTotalContainer"></div>
+
+<div class="button-group">
+    <button class="action-button" onclick="location.href='/orderdetails'">Order Details</button>
+    <button class="action-button" onclick="showConfirmModal()">Clear Cart</button>
+  </div>
+  
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p>Are you sure you want to clear your cart?</p>
+        <button onclick="clearCart()">Yes</button>
+        <button onclick="closeModal()">No</button>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    window.onload = loadCart;
+    // Function to show the confirmation modal
+    function showConfirmModal() {
+        document.getElementById("confirmModal").style.display = "block";
+    }
+
+    // Function to close the confirmation modal
+    function closeModal() {
+        document.getElementById("confirmModal").style.display = "none";
+    }
+
+    // Function to clear the cart
+    function clearCart() {
+        localStorage.removeItem("cart");
+        loadCart();
+        closeModal();
+    }
+</script>
+{% endblock %}
